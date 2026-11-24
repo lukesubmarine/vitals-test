@@ -277,7 +277,7 @@ function initialize(){
  document.addEventListener("keydown",event=>{if(event.key==="Escape")document.querySelectorAll(".modal-bg.open").forEach(modal=>hideModal(modal.id))});
  renderFilters();renderHome();updateCloudStatus();if(cloudReady())loadShared(false);
  window.addEventListener("online",()=>{if(!pending)loadShared(false)});
- if("serviceWorker"in navigator&&location.protocol!=="file:")window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+ if("serviceWorker"in navigator&&location.protocol!=="file:")window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=vitals-test-1").catch(()=>{}));
 }
 function createChecklist(){
  const name=$("newTitle").value.trim();if(!name){$("newTitle").focus();return}
@@ -287,5 +287,6 @@ function createChecklist(){
 }
 initialize();
 })();
+
 
 

@@ -1,5 +1,5 @@
 const CACHE="vitals-test-cache-v1";
-const FILES=["./","./index.html","./styles.css","./data.js","./app.js","./public-config.js","./manifest.webmanifest","./icon-192.png","./icon-512.png"];
+const FILES=["./","./index.html","./styles.css","./data.js","./app.js?v=vitals-test-1","./public-config.js","./manifest.webmanifest","./icon-192.png","./icon-512.png"];
 self.addEventListener("install",event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)));
  self.skipWaiting();
@@ -27,6 +27,7 @@ self.addEventListener("fetch",event=>{
   });
  }));
 });
+
 
 
 
