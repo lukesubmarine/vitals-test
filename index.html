@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101311">
+  <meta name="description" content="VITALS — First Aid Training Assessor">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>VITALS — First Aid Training Assessor</title>
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <span class="brand">VITALS</span>
+      <nav class="top-actions" aria-label="Main navigation">
+        <button class="small" id="sharedButton" type="button">SHARED LIST</button>
+        <button class="small" id="homeButton" type="button">HOME</button>
+      </nav>
+    </header>
+
+    <main id="homePage" class="page active">
+      <section class="hero">
+        <h1>VITALS</h1>
+        <h2>FIRST AID TRAINING ASSESSOR</h2>
+      </section>
+      <div class="search-wrap">
+        <label class="visually-hidden" for="searchInput">Search first-aid scenarios</label>
+        <span class="glass" aria-hidden="true">⌕</span>
+        <input id="searchInput" class="search" type="search" placeholder="Search a first aid scenario…" autocomplete="off">
+      </div>
+      <p class="hint">Search by condition, symptom or common description</p>
+      <div id="filters" class="filters" aria-label="Scenario categories"></div>
+      <p id="cloudStatus" class="cloud-status" role="status" aria-live="polite"></p>
+      <div id="results" class="results"></div>
+      <footer class="footer">
+        PRACTISE • REVIEW • IMPROVE<br>
+        Training templates only. In an emergency in Australia call Triple Zero (000). Follow current accredited training and local guidance.
+      </footer>
+    </main>
+
+    <main id="detailPage" class="page" hidden>
+      <section class="head">
+        <button class="back" id="backButton" type="button">← BACK TO SEARCH</button>
+        <h1 id="scenarioTitle"></h1>
+        <p id="scenarioDescription"></p>
+        <span id="scenarioCategory" class="badge"></span>
+      </section>
+      <div class="tabs" role="tablist" aria-label="Assessment levels">
+        <button class="tab active" type="button" role="tab" aria-selected="true" data-level="1">LEVEL 1</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-level="2">LEVEL 2</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-level="3">LEVEL 3</button>
+      </div>
+      <div class="meta"><strong id="levelName">FOUNDATION</strong><span id="progressCount"></span></div>
+      <div id="criteriaList" class="criteria"></div>
+      <div class="actions">
+        <button class="secondary" id="editLevelButton" type="button">EDIT THIS LEVEL</button>
+        <button class="secondary" id="editChecklistButton" type="button">EDIT CHECKLIST</button>
+        <button class="danger" id="deleteChecklistButton" type="button">DELETE CHECKLIST</button>
+      </div>
+      <section id="editor" class="editor" aria-label="Checklist editor">
+        <h3 id="editorHeading">EDIT LEVEL</h3>
+        <p>Each level keeps its set size: 5, 10 or 15 criteria.</p>
+        <div id="editorFields" class="edit-list"></div>
+        <div class="edit-buttons">
+          <button class="secondary" id="cancelEditorButton" type="button">CANCEL</button>
+          <button class="primary" id="saveEditorButton" type="button">SAVE CHANGES</button>
+        </div>
+      </section>
+      <footer class="footer">VITALS • FIRST AID TRAINING ASSESSOR</footer>
+    </main>
+  </div>
+
+  <div class="modal-bg" id="passcodeModal" role="dialog" aria-modal="true" aria-labelledby="passcodeHeading">
+    <div class="modal">
+      <h2 id="passcodeHeading">EDITING PASSCODE</h2>
+      <p>Enter the four-digit code to create, edit or delete checklists.</p>
+      <div class="note">This is a simple deterrent in the page. Anyone inspecting the public app files can find it, so it is not secure authentication.</div>
+      <label for="passcodeInput">FOUR-DIGIT PASSCODE</label>
+      <input id="passcodeInput" class="field" type="password" inputmode="numeric" maxlength="4" autocomplete="one-time-code">
+      <div class="modal-buttons">
+        <button class="secondary" id="cancelPasscodeButton" type="button">CANCEL</button>
+        <button class="primary" id="unlockButton" type="button">UNLOCK EDITING</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="createModal" role="dialog" aria-modal="true" aria-labelledby="createHeading">
+    <div class="modal">
+      <h2 id="createHeading">CREATE CHECKLIST</h2>
+      <p>Add a personal scenario. New custom checklists are saved on this device and can be shared by publishing.</p>
+      <label for="newTitle">CHECKLIST NAME</label>
+      <input id="newTitle" class="field" maxlength="80" placeholder="e.g. Nosebleed">
+      <label for="newDescription">DESCRIPTION / SEARCH TERMS</label>
+      <input id="newDescription" class="field" maxlength="240" placeholder="Optional keywords">
+      <label for="newCategory">CATEGORY</label>
+      <select id="newCategory" class="field"></select>
+      <div class="modal-buttons">
+        <button class="secondary" id="cancelCreateButton" type="button">CANCEL</button>
+        <button class="primary" id="createButton" type="button">CREATE</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="renameModal" role="dialog" aria-modal="true" aria-labelledby="renameHeading">
+    <div class="modal">
+      <h2 id="renameHeading">EDIT CHECKLIST</h2>
+      <label for="renameTitle">NAME</label>
+      <input id="renameTitle" class="field" maxlength="80">
+      <label for="renameDescription">DESCRIPTION / SEARCH TERMS</label>
+      <input id="renameDescription" class="field" maxlength="240">
+      <label for="renameCategory">CATEGORY</label>
+      <select id="renameCategory" class="field"></select>
+      <div class="modal-buttons">
+        <button class="secondary" id="cancelRenameButton" type="button">CANCEL</button>
+        <button class="primary" id="saveRenameButton" type="button">SAVE</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="cloudModal" role="dialog" aria-modal="true" aria-labelledby="cloudHeading">
+    <div class="modal">
+      <h2 id="cloudHeading">SHARED CHECKLIST BACKUP</h2>
+      <p id="cloudHelp"></p>
+      <div id="cloudMessage" class="note" role="status" aria-live="polite"></div>
+      <div class="note"><strong>Progress stays on this device.</strong> Publishing shares checklist names and criteria only. Latest shared content needs an internet connection; the app and saved progress still work offline.</div>
+      <div id="ownerCredentials">
+        <label for="ownerEmail">OWNER EMAIL</label>
+        <input id="ownerEmail" class="field" type="email" autocomplete="username" placeholder="Account configured in Supabase">
+        <label for="ownerPassword">OWNER PASSWORD</label>
+        <input id="ownerPassword" class="field" type="password" autocomplete="current-password" placeholder="Used for sign-in; not saved by VITALS">
+      </div>
+      <div class="modal-buttons">
+        <button class="secondary" id="closeCloudButton" type="button">CLOSE</button>
+        <button class="secondary" id="loadSharedButton" type="button">LOAD SHARED LIST</button>
+        <button class="primary" id="publishButton" type="button">SIGN IN &amp; PUBLISH</button>
+        <button class="secondary" id="signOutButton" type="button" hidden>SIGN OUT</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./public-config.js"></script>
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
