@@ -4,7 +4,8 @@ const DATA=window.VITALS_DATA;
 const EDIT_PASSCODE="3272";
 if(!DATA||!Array.isArray(DATA.catalog))throw new Error("VITALS checklist data did not load.");
 const SIZES=DATA.sizes;
-const STORE_KEY="vitals-store";
+const STORE_KEY="vitals-test-store";
+const PENDING_KEY="vitals-test-pending";
 const $=id=>document.getElementById(id);
 const homePage=$("homePage"),detailPage=$("detailPage"),searchInput=$("searchInput");
 const resultBox=$("results"),filterBox=$("filters"),cloudStatus=$("cloudStatus");
@@ -26,7 +27,7 @@ function validLevels(levels){return Array.isArray(levels)&&levels.length===3&&le
 function normalizeChecks(checks,levels){return levels.map((items,i)=>items.map((_,j)=>Boolean(Array.isArray(checks&&checks[i])&&checks[i][j])))}
 function parseStored(){try{const value=JSON.parse(localStorage.getItem(STORE_KEY)||"null");return Array.isArray(value)?value:[]}catch(_){return[]}}
 let previous=parseStored();
-let pending=localStorage.getItem("vitals-pending")==="1";
+let pending=localStorage.getItem(PENDING_KEY)==="1";
 const oldById=new Map(previous.filter(item=>item&&item.id).map(item=>[item.id,item]));
 const store=DATA.catalog.map((base,index)=>{
  const prior=oldById.get(base.id);
@@ -57,7 +58,7 @@ for(const prior of oldById.values()){
 let current=null,activeLevel=1,activeCategory="ALL",editUnlocked=false,pendingEditAction=null,unlockTimer=null,cloudToken=null,lastUpdated=null;
 function persist(markDirty){
  if(markDirty)pending=true;
- try{localStorage.setItem(STORE_KEY,JSON.stringify(store));localStorage.setItem("vitals-pending",pending?"1":"0")}catch(_){setCloudStatus("This browser could not save local checklist data.")}
+ try{localStorage.setItem(STORE_KEY,JSON.stringify(store));localStorage.setItem(PENDING_KEY,pending?"1":"0")}catch(_){setCloudStatus("This browser could not save local checklist data.")}
  updateCloudStatus();
 }
 persist(false);
@@ -286,3 +287,5 @@ function createChecklist(){
 }
 initialize();
 })();
+
+
