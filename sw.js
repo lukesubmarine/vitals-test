@@ -1,11 +1,11 @@
-const CACHE="vitals-cache-v3";
+const CACHE="vitals-test-cache-v1";
 const FILES=["./","./index.html","./styles.css","./data.js","./app.js","./public-config.js","./manifest.webmanifest","./icon-192.png","./icon-512.png"];
 self.addEventListener("install",event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)));
  self.skipWaiting();
 });
 self.addEventListener("activate",event=>{
- event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith("vitals-cache-")&&key!==CACHE).map(key=>caches.delete(key)))));
+ event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith("vitals-test-cache-")&&key!==CACHE).map(key=>caches.delete(key)))));
  self.clients.claim();
 });
 self.addEventListener("fetch",event=>{
@@ -27,3 +27,6 @@ self.addEventListener("fetch",event=>{
   });
  }));
 });
+
+
+
